@@ -44,7 +44,7 @@
 	</head>
 	<body>
 		<div style="float:left;position:absolute;width:auto;margin-top: 66px;margin-left:15px">
-			<ul id="lrclist" style="transform: translateY(300px);width:500px;"><!-- 保证歌词在正中间 -->
+			<ul id="lrclist" style="transform: translateY(200px);width:500px;"><!-- 初始值 -->
 				
 			</ul>
 		</div>
@@ -141,7 +141,7 @@
 				
 				if (currentTime<=lrcTime[j+1] && currentTime>=lrcTime[j]){
 					currentLine =  j;
-					ppxx = 250-(currentLine*32);
+					ppxx = 180-(currentLine*32);
 					ul.style.transform = "translateY("+ppxx+"px)";
 					
 					$li.get(currentLine-1).className="";
