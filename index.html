@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-		<title>LRC</title>
+		<title>LRC滚动</title>
 		<script src="js/jquery.min.js"></script>
 		<style>
 			div{
@@ -44,7 +44,7 @@
 	</head>
 	<body>
 		<div style="float:left;position:absolute;width:auto;margin-top: 66px;margin-left:15px">
-			<ul id="lrclist" style="transform: translateY(250px);width:500px;"><!-- 保证歌词在正中间 -->
+			<ul id="lrclist" style="transform: translateY(300px);width:500px;"><!-- 保证歌词在正中间 -->
 				
 			</ul>
 		</div>
@@ -126,7 +126,7 @@
 					isLocked=true;
 					currentTime = audio.currentTime;
 					for(n=-8,len=lrcTime.length;n<=8;n++)
-						{
+						{//将可视部分的所有其他歌词设置为默认
 							if(currentLine+n<len-1)
 								{
 									$li.get(currentLine+n).className="";
@@ -155,23 +155,7 @@
 			
 		};
 		
-//		audio.onseeked = function() {//audio进度更改后事件
-//			
-//			isLocked=true;
-//			currentTime = audio.currentTime;
-//			for (k=0, len=lrcTime.length; k<len; k++){
-//				$li.get(k).className="";
-//				if (currentTime<=lrcTime[k+1] && currentTime>=lrcTime[k]){
-//					
-//					
-//					currentLine =  k;
-//					break;
-//				}
-//				
-//			}
-//			isLocked=false;
-//				
-//		};
+
 		
 		</script>
 	</body>
