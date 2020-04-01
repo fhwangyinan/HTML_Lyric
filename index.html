@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+		<title>LRC</title>
+		<script src="js/jquery.min.js"></script>
+		<style>
+			div{
+				width:340px;
+				height:500px;
+				margin:0 auto;
+				overflow:hidden;
+			}
+			ul{
+				transition-duration: 600ms;
+			}
+			ul, li{
+				list-style:none;
+				padding: 0;
+				margin: 0;
+			}
+			li.on{
+				color: #66CCFF;
+				font-weight:bold;
+				letter-spacing:2px;
+			}
+			p{
+				overflow: hidden;
+				text-overflow: ellipsis;
+				height: 16px;
+				line-height: 16px;
+				-webkit-line-clamp: 1;
+				-webkit-box-orient: vertical;
+				display: -webkit-box;
+				text-align: left;
+				margin-top: 0;
+				margin-bottom: 16px;
+			}
+			audio{
+				margin-top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="float:left;position:absolute;width:auto;margin-top: 66px;margin-left:15px">
+			<ul id="lrclist" style="transform: translateY(250px);width:500px;"><!-- 保证歌词在正中间 -->
+				
+			</ul>
+		</div>
+		<audio id="audio" src="audio/1.mp3" controls="controls" style="position: absolute;" ></audio>
+		
+		<script>
+		var lrcJSON = {
+			"[00:00.000]":"告白气球",
+"[00:04.550]":"词：方文山 曲：周杰伦",
+"[00:09.230]":"演唱：周杰伦",
+"[00:22.920]":"塞纳河畔 左岸的咖啡2323232323232323wdwdwdwwd",
+"[00:26.040]":"我手一杯 品尝你的美",
+"[00:28.950]":"留下唇印的嘴",
+"[00:31.980]":"",
+"[00:33.670]":"花店玫瑰 名字写错谁",
+"[00:36.760]":"告白气球 风吹到对街",
+"[00:39.610]":"微笑在天上飞",
+"[00:42.670]":"",
+"[00:43.070]":"你说你有点难追 想让我知难而退",
+"[00:48.980]":"礼物不需挑最贵 只要香榭的落叶",
+"[00:54.380]":"营造浪漫的约会 不害怕搞砸一切",
+"[00:59.690]":"拥有你就拥有 全世界",
+"[01:04.260]":"",
+"[01:04.540]":"亲爱的 爱上你 从那天起",
+"[01:10.980]":"甜蜜的很轻易",
+"[01:14.960]":"亲爱的 别任性 你的眼睛",
+"[01:21.760]":"在说我愿意",
+"[01:25.680]":"",
+"[01:48.180]":"塞纳河畔 左岸的咖啡",
+"[01:51.360]":"我手一杯 品尝你的美",
+"[01:54.310]":"留下唇印的嘴",
+"[01:57.440]":"",
+"[01:59.090]":"花店玫瑰 名字写错谁",
+"[02:01.710]":"告白气球 风吹到对街",
+"[02:04.780]":"微笑在天上飞",
+"[02:07.970]":"",
+"[02:08.310]":"你说你有点难追 想让我知难而退",
+"[02:14.330]":"礼物不需挑最贵 只要香榭的落叶",
+"[02:19.620]":"营造浪漫的约会 不害怕搞砸一切",
+"[02:25.010]":"拥有你就拥有 全世界",
+"[02:29.600]":"",
+"[02:29.900]":"亲爱的 爱上你 从那天起",
+"[02:36.480]":"甜蜜的很轻易",
+"[02:40.440]":"亲爱的 别任性 你的眼睛",
+"[02:47.090]":"在说我愿意",
+"[02:50.800]":"",
+"[02:51.290]":"亲爱的 爱上你 恋爱日记",
+"[02:57.700]":"飘香水的回忆",
+"[03:01.530]":"一整瓶 的梦境 全都有你",
+"[03:08.390]":"搅拌在一起",
+"[03:12.340]":"亲爱的别任性 你的眼睛",
+"[03:20.330]":"在说我愿意",
+"[03:27.470]":""
+
+		};
+		
+		
+		var lrcTime = [];//歌词对应的时间数组
+		var ul = $("#lrclist")[0];//获取ul
+		
+		var i = 0;
+		$.each(lrcJSON, function(key, value) {//遍历lrc
+			lrcTime[i++] = parseFloat(key.substr(1,3)) * 60 + parseFloat(key.substring(4,10));//00:00.000转化为00.000格式
+			ul.innerHTML += "<li><p>"+lrcJSON[key]+"</p></li>";//ul里填充歌词
+		});
+		lrcTime[lrcTime.length] = lrcTime[lrcTime.length-1] + 3;//如不另加一个结束时间，到最后歌词滚动不到最后一句
+		
+		
+		var $li = $("#lrclist>li");//获取所有li
+		var isLocked = false;//当拖动进度条的时候锁定，防止拖动进度条时audio时间改变出现冲突
+		var currentLine = 0;//当前播放到哪一句了
+		var currentTime;//当前播放的时间
+		var audio = document.getElementById("audio");
+		var ppxx;//保存ul的translateY值
+		
+		audio.ontimeupdate = function() {//audio时间改变事件
+			if(isLocked==false)
+				{
+					isLocked=true;
+					currentTime = audio.currentTime;
+					for(n=-8,len=lrcTime.length;n<=8;n++)
+						{
+							if(currentLine+n<len-1)
+								{
+									$li.get(currentLine+n).className="";
+							console.log(" clear"+currentLine+n);
+									
+								}
+							
+							else break;
+						}
+					
+			for (j=0, len=lrcTime.length; j<len; j++){
+				
+				if (currentTime<=lrcTime[j+1] && currentTime>=lrcTime[j]){
+					currentLine =  j;
+					ppxx = 250-(currentLine*32);
+					ul.style.transform = "translateY("+ppxx+"px)";
+					
+					$li.get(currentLine-1).className="";
+					console.log("on"+currentLine);
+					$li.get(currentLine).className="on";
+					break;
+				}
+			}
+					isLocked=false;
+				}
+			
+		};
+		
+//		audio.onseeked = function() {//audio进度更改后事件
+//			
+//			isLocked=true;
+//			currentTime = audio.currentTime;
+//			for (k=0, len=lrcTime.length; k<len; k++){
+//				$li.get(k).className="";
+//				if (currentTime<=lrcTime[k+1] && currentTime>=lrcTime[k]){
+//					
+//					
+//					currentLine =  k;
+//					break;
+//				}
+//				
+//			}
+//			isLocked=false;
+//				
+//		};
+		
+		</script>
+	</body>
+</html>
